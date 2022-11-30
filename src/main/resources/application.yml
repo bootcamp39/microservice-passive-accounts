@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: microservice-pasive-accounts
+  cloud:
+    config:
+      enabled: true
+      label: master
+      uri: http://localhost:7000
+  
