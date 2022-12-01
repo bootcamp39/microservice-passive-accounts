@@ -1,6 +1,6 @@
 spring:
   application:
-    name: microservice-pasive-accounts
+    name: microservice-passive-accounts
   cloud:
     config:
       enabled: true
