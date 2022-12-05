@@ -1,8 +1,10 @@
-package com.nttdata.microservice.bankpasiveaccounts;
+package com.nttdata.microservice.bankpassiveaccounts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
+@EnableEurekaClient
 @SpringBootApplication
 public class Application {
 

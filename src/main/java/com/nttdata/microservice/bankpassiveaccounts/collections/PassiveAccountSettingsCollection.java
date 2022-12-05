@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.collections;
+package com.nttdata.microservice.bankpassiveaccounts.collections;
 
 import java.util.Date;
 
@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(value = "movements")
-public class MovementsCollection {
+@Document(value = "passive_accounts_settings")
+public class PassiveAccountSettingsCollection {
 	
 	@Id
 	private ObjectId id;
 	
-	private String passiveAccountCode;
+	private String passiveAccountType;
+	private Double minimunOpeningAmount;
+	private int maximunTransationsWithoutCommission;
+	private boolean mustHaveCreditCard;
 	
-	private Double amount;
-	private String currency;
-	private String movementType;
-	
+	private String state;
 	private Date createdAt;
 	private Date updatedAt;
 	private Date deletedAt;

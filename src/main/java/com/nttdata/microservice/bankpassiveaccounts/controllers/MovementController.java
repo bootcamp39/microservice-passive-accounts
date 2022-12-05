@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.controllers;
+package com.nttdata.microservice.bankpassiveaccounts.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nttdata.microservice.bankpasiveaccounts.collections.MovementsCollection;
-import com.nttdata.microservice.bankpasiveaccounts.services.IMovementService;
+import com.nttdata.microservice.bankpassiveaccounts.collections.MovementsCollection;
+import com.nttdata.microservice.bankpassiveaccounts.services.IMovementService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "movement")
 public class MovementController {
 	
-	private static Logger logger = Logger.getLogger(PasiveAccountController.class);
+	private static Logger logger = Logger.getLogger(PassiveAccountController.class);
 	
 	@Autowired
 	private IMovementService movementService;

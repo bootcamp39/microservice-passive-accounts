@@ -1,6 +1,6 @@
-package com.nttdata.microservice.bankpasiveaccounts.services;
+package com.nttdata.microservice.bankpassiveaccounts.services;
 
-import com.nttdata.microservice.bankpasiveaccounts.collections.MovementsCollection;
+import com.nttdata.microservice.bankpassiveaccounts.collections.MovementsCollection;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

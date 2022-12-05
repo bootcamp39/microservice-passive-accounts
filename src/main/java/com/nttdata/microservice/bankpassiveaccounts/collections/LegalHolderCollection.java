@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.collections;
+package com.nttdata.microservice.bankpassiveaccounts.collections;
 
 import java.util.Date;
 
@@ -24,6 +24,7 @@ public class LegalHolderCollection {
 	private String legalHolderType;
 	private String names;
 	
+	private String state;
 	private Date createdAt;
 	private Date updatedAt;
 	private Date deletedAt;

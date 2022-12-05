@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.controllers;
+package com.nttdata.microservice.bankpassiveaccounts.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nttdata.microservice.bankpasiveaccounts.collections.LegalHolderCollection;
-import com.nttdata.microservice.bankpasiveaccounts.services.ILegalHolderService;
+import com.nttdata.microservice.bankpassiveaccounts.collections.LegalHolderCollection;
+import com.nttdata.microservice.bankpassiveaccounts.services.ILegalHolderService;
 
 import reactor.core.publisher.Mono;
 
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "legal-holder")
 public class LegalHolderController {
 	
-	private static Logger logger = Logger.getLogger(PasiveAccountController.class);
+	private static Logger logger = Logger.getLogger(PassiveAccountController.class);
 	
 	@Autowired
 	private ILegalHolderService legalHolderService;

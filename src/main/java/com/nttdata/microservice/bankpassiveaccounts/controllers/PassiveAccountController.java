@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.controllers;
+package com.nttdata.microservice.bankpassiveaccounts.controllers;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,48 +11,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.nttdata.microservice.bankpasiveaccounts.collections.PasiveAccountCollection;
-import com.nttdata.microservice.bankpasiveaccounts.services.IPasiveAccountService;
+
+import com.nttdata.microservice.bankpassiveaccounts.collections.PassiveAccountCollection;
+import com.nttdata.microservice.bankpassiveaccounts.services.IPassiveAccountService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "passive-accounts")
-public class PasiveAccountController {
+public class PassiveAccountController {
 	
-	private static Logger logger = Logger.getLogger(PasiveAccountController.class);
+	private static Logger logger = Logger.getLogger(PassiveAccountController.class);
 
 	@Autowired
-	private IPasiveAccountService pasiveAccountService;
+	private IPassiveAccountService pasiveAccountService;
 	
 	@GetMapping("/list-passive-accounts")
-	public Flux<PasiveAccountCollection> getAllPasiveAccounts() throws Exception {
+	public Flux<PassiveAccountCollection> getAllPasiveAccounts() throws Exception {
 		logger.info("get all pasive accounts");
 		return pasiveAccountService.getAll();
 	}
 
 	@GetMapping("/find/{personCode}")
-	public Mono<PasiveAccountCollection> getAccountByPersonCode(@PathVariable("personCode") String personCode)
+	public Mono<PassiveAccountCollection> getAccountByPersonCode(@PathVariable("personCode") String personCode)
 			throws Exception {
 		logger.info("get account by personCode");
 		return pasiveAccountService.getByAccountCode(personCode);
 	}
 	
 	@PostMapping(value = "/store")
-	public Mono<PasiveAccountCollection> savePasiveAccount(@RequestBody PasiveAccountCollection collection) throws Exception{
+	public Mono<PassiveAccountCollection> savePasiveAccount(@RequestBody PassiveAccountCollection collection) throws Exception{
 		logger.info("save passive account");
 		return pasiveAccountService.save(collection);
 	}
 	
 	@PutMapping(value = "/update/{personCode}")
-	public Mono<PasiveAccountCollection> updatePasiveAccount(@RequestParam("personCode") String personCode,
-			@RequestBody PasiveAccountCollection updateCollection) throws Exception {
+	public Mono<PassiveAccountCollection> updatePasiveAccount(@RequestParam("personCode") String personCode,
+			@RequestBody PassiveAccountCollection updateCollection) throws Exception {
 
-		Mono<PasiveAccountCollection> result = pasiveAccountService.getByAccountCode(personCode);
-		PasiveAccountCollection resultCollection = result.block();
+		Mono<PassiveAccountCollection> result = pasiveAccountService.getByAccountCode(personCode);
+		PassiveAccountCollection resultCollection = result.block();
 
-		Mono<PasiveAccountCollection> resultUpdated = null;
+		Mono<PassiveAccountCollection> resultUpdated = null;
 
 		try {
 			if (resultCollection != null) {
@@ -67,7 +68,7 @@ public class PasiveAccountController {
 	}
 	
 	@DeleteMapping(value = "/delete")
-	public Mono<Void> deletePasiveAccount(@RequestBody PasiveAccountCollection collection) throws Exception{
+	public Mono<Void> deletePasiveAccount(@RequestBody PassiveAccountCollection collection) throws Exception{
 		return pasiveAccountService.delete(collection);
 	}
 

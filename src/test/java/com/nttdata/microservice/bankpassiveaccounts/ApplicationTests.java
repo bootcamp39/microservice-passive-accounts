@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts;
+package com.nttdata.microservice.bankpassiveaccounts;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
-package com.nttdata.microservice.bankpasiveaccounts.services;
+package com.nttdata.microservice.bankpassiveaccounts.services;
 
-import com.nttdata.microservice.bankpasiveaccounts.collections.LegalHolderCollection;
+import com.nttdata.microservice.bankpassiveaccounts.collections.LegalHolderCollection;
 
 import reactor.core.publisher.Mono;
 

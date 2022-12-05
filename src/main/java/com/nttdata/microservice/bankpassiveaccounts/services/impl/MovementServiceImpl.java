@@ -1,12 +1,14 @@
-package com.nttdata.microservice.bankpasiveaccounts.services;
+package com.nttdata.microservice.bankpassiveaccounts.services.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nttdata.microservice.bankpasiveaccounts.collections.MovementsCollection;
-import com.nttdata.microservice.bankpasiveaccounts.collections.enums.PassiveAccountTypeEnum;
-import com.nttdata.microservice.bankpasiveaccounts.repository.IMovementRepository;
+import com.nttdata.microservice.bankpassiveaccounts.collections.MovementsCollection;
+import com.nttdata.microservice.bankpassiveaccounts.collections.enums.PassiveAccountTypeEnum;
+import com.nttdata.microservice.bankpassiveaccounts.repository.IMovementRepository;
+import com.nttdata.microservice.bankpassiveaccounts.services.IMovementService;
+import com.nttdata.microservice.bankpassiveaccounts.services.IPassiveAccountService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,7 +20,7 @@ public class MovementServiceImpl implements IMovementService{
 	private IMovementRepository movementRepository;
 	
 	@Autowired
-	private IPasiveAccountService pasiveAccountService;
+	private IPassiveAccountService pasiveAccountService;
 
 	@Override
 	public Mono<MovementsCollection> save(MovementsCollection collection) throws Exception {

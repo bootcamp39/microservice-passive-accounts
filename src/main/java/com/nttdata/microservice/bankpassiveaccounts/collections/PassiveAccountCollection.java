@@ -1,4 +1,4 @@
-package com.nttdata.microservice.bankpasiveaccounts.collections;
+package com.nttdata.microservice.bankpassiveaccounts.collections;
 
 import java.util.Date;
 
@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(value = "pasive_accounts")
-public class PasiveAccountCollection {
+@Document(value = "passive_accounts")
+public class PassiveAccountCollection {
 	
 	@Id
 	private ObjectId id;
 	
-	private String passiveAccountCode;
+	//private String passiveAccountCode;
 	private String accountType;
 	private String personType;
 	private String accountNumber;
 	private String personCode;
-	private String state;
+	
 	
 	private Double accountAmount;
 	private Double commission;
@@ -32,6 +32,7 @@ public class PasiveAccountCollection {
 	private Integer dayMovementAvailable;
 	private Integer availableMovementsPerMonthAvailable;
 	
+	private String state;
 	private Date createdAt;
 	private Date updatedAt;
 	private Date deletedAt;
