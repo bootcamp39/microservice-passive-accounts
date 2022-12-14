@@ -497,9 +497,8 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 
 	@Override
 	public Mono<Double> getAccountBalance(String accountNumber) {
-		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getAccountBalance());
-		});
+		return repository.findByAccountNumber(accountNumber).next()
+				.map(x -> x.getAccountBalance());
 	}
 
 	@Override
