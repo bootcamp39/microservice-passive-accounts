@@ -18,19 +18,25 @@ public class PassiveAccountCollection {
 	@Id
 	private ObjectId id;
 	
-	//private String passiveAccountCode;
 	private String accountType;
 	private String personType;
 	private String accountNumber;
 	private String personCode;
 	
+	private String debitCardNumber;
 	
 	private Double accountAmount;
-	private Double commission;
-	private Double withdrawalAmountPerMonthAvailable;
-	private Double depositAmountPerMonthAvailable;
+	private Double accountBalance;
+	private Double maintenanceCommission;
+	private Double transactionCommission;
+	private Date chargeCommisionDate;
+	
+	private Double minimumOpenningAmount;
+	private Double minimumAverageAmount;
+	private Integer maximumTransactionsWithoutCommission;
+	private Integer maximumTransactions;
+	
 	private Integer dayMovementAvailable;
-	private Integer availableMovementsPerMonthAvailable;
 	
 	private String state;
 	private Date createdAt;

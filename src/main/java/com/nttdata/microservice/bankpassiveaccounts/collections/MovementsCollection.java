@@ -19,10 +19,9 @@ public class MovementsCollection {
 	@Id
 	private ObjectId id;
 	
-	private String passiveAccountCode;
+	private String accountNumber;
 	
 	private Double amount;
-	private String currency;
 	private String movementType;
 	
 	private String state;
