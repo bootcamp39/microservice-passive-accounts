@@ -19,10 +19,15 @@ public class MovementsCollection {
 	@Id
 	private ObjectId id;
 	
-	private String accountNumber;
+	private String personCode;
+	private String debitCardNumber;
+	private String accountNumberSource;
+	private String accountNumberDestination;
 	
 	private Double amount;
 	private String movementType;
+	
+	private Double transactionCommission;
 	
 	private String state;
 	private Date createdAt;

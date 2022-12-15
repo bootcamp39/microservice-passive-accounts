@@ -1,7 +1,6 @@
 package com.nttdata.microservice.bankpassiveaccounts.services.impl;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,100 +30,13 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 	@Autowired
 	private IMovementService movementService;
 	
-	/*@Override
-	public Flux<PassiveAccountCollection> getAll() throws Exception {
-		// TODO Auto-generated method stub
-		return passiveAccountRepository.findAll();
-	}*/
-
-	/*@Override
-	public Flux<PassiveAccountCollection> getByPersonCode(String code) throws Exception {
-		// TODO Auto-generated method stub
-		Flux<PassiveAccountCollection> col = passiveAccountRepository.findAll().filter(x -> x.getPersonCode().equals(code));
-		
-		return col;
-	}*/
-	
-	/*@Override
-	public Mono<PassiveAccountCollection> getByAccountCode(String accountCode) {
-		// TODO Auto-generated method stub
-		Mono<PassiveAccountCollection> col = passiveAccountRepository.findAll().filter(x -> x.getAccountNumber().equals(accountCode)).next();
-		return col;
-	}*/
-	
-	/*private Mono<Long> countAccountsByPersonCode(String personCode) {
-		return passiveAccountRepository.findAll().filter(x -> x.getPersonCode().equals(personCode)).count();
-	}*/
-	
-	/*private Mono<PassiveAccountCollection> saveAccountForNaturalPerson(PassiveAccountCollection collection) throws Exception{
-		
-		return passiveAccountRepository.countByPersonCode(collection.getPersonCode())
-		.flatMap(quantityAccounts -> 
-		{
-			if(quantityAccounts==0) {
-				return passiveAccountSettingsService.getByType(collection.getAccountType())
-						.flatMap(settings -> {
-							if(collection.getAccountAmount() >= settings.getMinimumOpeningAmount()) {
-								collection.setAccountNumber(UUID.randomUUID().toString());
-								collection.setCreatedAt(new Date());
-								if(collection.getAccountType().equals(PassiveAccountTypeEnum.SAVING_ACCOUNT.toString())) {
-									collection.setCommission(0.00); //0 de comisión
-								}else if(collection.getAccountType().equals(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString())) {
-									collection.setAvailableMovementsPerMonthAvailable(-1); // -1 movimientos ilimitados
-								}else if(collection.getAccountType().equals(PassiveAccountTypeEnum.FIX_TERM_ACCOUNT.toString())) {
-									collection.setCommission(0.00); //0 de comisión
-									collection.setAvailableMovementsPerMonthAvailable(1); // 1 movimiento: deposito o retiro por mes
-								}
-								return passiveAccountRepository.save(collection);	
-							}else {
-								return Mono.error(new Exception("The account amount must be greater than or equal to the minimum opening amount"));
-							}
-							
-							
-						}
-						);
-				
-			}else {
-				return Mono.error(new Exception("The natural person already has an account created"));	
-			}
-		});
-	}*/
-	
-	/*private Mono<PassiveAccountCollection> saveAccountForLegalPerson(PassiveAccountCollection collection) throws Exception{
-		
-		if(collection.getAccountType().equals(PassiveAccountTypeEnum.SAVING_ACCOUNT.toString())
-				|| collection.getAccountType().equals(PassiveAccountTypeEnum.FIX_TERM_ACCOUNT.toString())) {
-			throw new Exception("The legal person cannot have a saving account or fix term account");
-		}else if(collection.getAccountType().equals(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString())) {
-			collection.setAccountNumber(UUID.randomUUID().toString());
-			collection.setCreatedAt(new Date());
-			collection.setCommission(0.00); //0 de comisión
-			collection.setAvailableMovementsPerMonthAvailable(1); // 1 movimiento: deposito o retiro por mes
-			return passiveAccountRepository.save(collection);
-		}else{
-			throw new Exception("Invalid account type!");	
-		}
-	}*/
-	
-
-	/*@Override
-	public Mono<PassiveAccountCollection> save(PassiveAccountCollection collection) throws Exception {
-		
-		if(collection.getPersonType().equals(PersonTypeEnum.NATURAL_PERSON.toString())) {
-			return saveAccountForNaturalPerson(collection);
-		}else if(collection.getPersonType().equals(PersonTypeEnum.LEGAL_PERSON.toString())) {
-			return saveAccountForLegalPerson(collection);
-		}else {
-			throw new Exception("Invalid person type!");
-		}
-	}*/
 
 	@Override
 	public Mono<PassiveAccountCollection> saveCurrentPersonalAccount(PassiveAccountCollection collection)
 			{
 		
 		return getMinimumOpeningAmount(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString())
-				.flatMap( x -> {
+				.flatMap( minimumOpeningAmount -> {
 					
 					//SETTING DEFAULT VALUES
 					collection.setAccountType(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString());
@@ -133,7 +45,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getMinimumOpenningAmount() < x) {
+					if(collection.getAccountAmount() < minimumOpeningAmount) {
 						return Mono.error(Exception::new);
 					}
 					
@@ -280,7 +192,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 				.next()
 				.flatMap(account -> {
 					//VALIDATE MINIMUM OPENING AMOUNT
-					return checkIfHaveAverageAmount(numberAccount, minimumAverageAmount)
+					return movementService.checkIfHaveAverageAmount(numberAccount, minimumAverageAmount)
 							.flatMap(result -> {
 								if(result == false) {
 									return Mono.error(RuntimeException::new);
@@ -365,15 +277,15 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 		
 		switch(PassiveAccountTypeEnum.valueOf(accountType)){
 		case CURRENT_ACCOUNT :
-			return Mono.just(0.0);
+			return Mono.just(1.0);
 		case FIX_TERM_ACCOUNT :
-			return Mono.just(0.0);
+			return Mono.just(2.0);
 		case SAVING_ACCOUNT :
-			return Mono.just(0.0);
+			return Mono.just(3.0);
 		case VIP :
-			return Mono.just(0.0);
+			return Mono.just(4.0);
 		case PYME :
-			return Mono.just(0.0);	
+			return Mono.just(5.0);	
 		default:
 			return Mono.just(0.0);
 		} 
@@ -393,90 +305,33 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 		});
 	}
 	
-	//@Override
-	//public Mono<Double> getMaxAverageByAccountNumber(String personCode) {
-		
-		//return null;
-		
-		/*return repository.getByPersonCode(personCode)
-				.next()
-				.flatMap(x -> {
-					return repository.countByAccountNumber(x.getAccountNumber())
-							.flatMap(count -> {
-								return repository.findByAccountNumber(x.getAccountNumber())
-										.map(y -> y.getAmount())
-										.reduce(0.0, (x1, x2) -> x1 + x2)
-										.map(sum -> sum / count);
-							});
-					})
-				.sort((a,b) -> a.compareTo(b))
-				.next();*/
-	//}
-	
-
-	/*@Override
-	public Mono<PassiveAccountCollection> getSavingAccountWithMinimumAverageAmount(String personCode, Double minimumAverageAmount) {
-		return repository.findByPersonCode(personCode)
-				.filter(x -> x.getAccountType().equals(PassiveAccountTypeEnum.SAVING_ACCOUNT.toString()))
-				.next()
-		.flatMap( x -> {
-			return Mono.just(x);
-		});
-	}*/
-
-	/*@Override
-	public Mono<Double> getMaintenanceCommission(String accountNumber) {
-		return repository.findByAccountNumber(accountNumber)
-				.map( x -> 
-					
-					movementService.getByAccountNumber(x.getAccountNumber())
-					.map(y -> y.getAmount())
-					.reduce(0.0, (x1, x2) -> x1 + x2)
-					//.map(z -> z.doubleValue())
-					.flatMap( z -> {
-						return Mono.just(z);
-					});
-					
-					//return x.getAccountAmount();
-				);
-			
-				.next().flatMap(x -> {
-			return movementService.getByAccountNumber(x.getAccountNumber())
-					.map( y -> y.getAmount())
-					.reduce(0.0, (x1, x2) -> x1 + x2)
-					.flatMap(z -> {
-						return movementService.countMovementsByAccountNumber(accountNumber)
-								.flatMap(a -> {
-									Double average = z / a;
-									return Mono.just(average);
-								});
-					});
-			//return Mono.just(x.getMaintenanceCommission());
-		});
-	}*/
-	
 	@Override
 	public Mono<Double> getTransactionCommission(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
 			return Mono.just(x.getTransactionCommission());
 		});
 	}
-
+	
 	@Override
-	public Flux<PassiveAccountCollection> getPassiveAccountsWithChargeCommissionPending(Date chargeCommissionDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public Mono<Double> getMaintenanceCommission(String accountNumber) {
+		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
+			return Mono.just(x.getMaintenanceCommission());
+		});
 	}
 
 	@Override
-	public Mono<PassiveAccountCollection> updateChargeCommissionDate(String accountNumber, Date chargeCommissionDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public Mono<Integer> getDayMovementAvailable(String accountNumber) {
+		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
+			return Mono.just(x.getDayMovementAvailable());
+		});
 	}
+	
+
+	
 
 
 	@Override
-	public Mono<Boolean> checkIfPassiveAccountExists(String accountNumber) {
+	public Mono<Boolean> checkIfExist(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber)
 				.switchIfEmpty(x -> Mono.just(false))
 				.count().flatMap(x -> {
@@ -503,98 +358,37 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 
 	@Override
 	public Mono<PassiveAccountCollection> updateDebitCardNumber(String accountNumber, String debitCardNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByAccountNumber(accountNumber).next()
+				.flatMap(account -> {
+			account.setDebitCardNumber(debitCardNumber);
+			return repository.save(account);
+		});
 	}
 
-	/*@Override
-	public Flux<PassiveAccountCollection> getByPersonCode(String personCode) {
-		return repository.findByPersonCode(personCode);
-	}*/
+	
+
+	
 
 	@Override
-	public Mono<Boolean> checkIfHaveAverageAmount(String accountNumber, Double minimumAverageAmount) {
-		
-		// SET START DATA AND END DATE
-		LocalDate local = LocalDate.now();
-	    local = local.minusMonths(1);
-	    
-	    LocalDate start = LocalDate.of(local.getYear(), local.getMonth(), 1);
-	    LocalDate end = LocalDate.of(local.getYear(), local.getMonth(),30);
-
-	    // GET SAVING ACCOUNT
-		/*return repository.findByAccountNumber(accountNumber)
+	public Mono<String> getAccountNumberAvailable(String personCode, Double movementAmount) {
+		return repository.findByPersonCode(personCode)
+				.filter(account -> account.getAccountBalance().compareTo(movementAmount) > 0)
 				.next()
-				.flatMap(account -> {*/
-					
-					//GET MOVEMENTS SUM AMOUNT A MONTH AGO
-					return movementService.getByAccountNumber(accountNumber)
-							.filter( mo ->  
-								 mo.getCreatedAt().toInstant()
-								.atZone(ZoneId.systemDefault())
-								.toLocalDate().isBefore(start)
-								
-								&& mo.getCreatedAt().toInstant()
-								.atZone(ZoneId.systemDefault())
-								.toLocalDate().isAfter(end)
-							)
-							.map(movement -> movement.getAmount())
-							.reduce(0.0, (x1, x2) -> x1 + x2)
-							.flatMap(suma -> {
-								
-								//GET MOVEMENTS COUNT A MONTH AGO
-								return movementService.getByAccountNumber(accountNumber)
-										.filter( m -> m.getCreatedAt().toInstant()
-												.atZone(ZoneId.systemDefault())
-												.toLocalDate().isBefore(start)
-												
-												&& m.getCreatedAt().toInstant()
-												.atZone(ZoneId.systemDefault())
-												.toLocalDate().isAfter(end)
-												)
-										.count()
-										.flatMap(cantidad -> {
-											
-											// CHECK IF MINIMUM AVERAGE AMOUNT IS GREATHER THAM CALCULATED AVERAGE AMOUNT 
-											if( (suma/cantidad) > minimumAverageAmount) {
-												return Mono.just(true);	
-											}
-											return Mono.just(false);
-										});
-								
-							});
-							
-				//});
+				.map(x -> x.getAccountNumber());
 	}
-
+	
+	
 	@Override
-	public Mono<Double> getMaintenanceCommission(String accountNumber) {
+	public Flux<PassiveAccountCollection> getPassiveAccountsWithChargeCommissionPending(Date chargeCommissionDate) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/*@Override
-	public Mono<PassiveAccountCollection> update(PassiveAccountCollection updatedCollection, String accountCode)
-			throws Exception {
+	@Override
+	public Mono<PassiveAccountCollection> updateChargeCommissionDate(String accountNumber, Date chargeCommissionDate) {
 		// TODO Auto-generated method stub
-		Mono<PassiveAccountCollection> result = this.getByAccountCode(accountCode);
-		PassiveAccountCollection resultNew = result.block();
-		resultNew.setWithdrawalAmountPerMonthAvailable(updatedCollection.getWithdrawalAmountPerMonthAvailable());
-		resultNew.setDepositAmountPerMonthAvailable(updatedCollection.getDepositAmountPerMonthAvailable());
-		resultNew.setDayMovementAvailable(updatedCollection.getDayMovementAvailable());
-		
-		return passiveAccountRepository.save(resultNew);
-	}*/
-
-	/*@Override
-	public Mono<Void> delete(PassiveAccountCollection collection) throws Exception {
-		// TODO Auto-generated method stub
-		Mono<PassiveAccountCollection> result = passiveAccountRepository.findAll().filter(x -> x.getAccountNumber().equals(collection.getAccountNumber())).next();
-		PassiveAccountCollection resultNew = result.block();
-		
-		return passiveAccountRepository.delete(resultNew);
-	}*/
-
+		return null;
+	}
 	
-	
+
 }

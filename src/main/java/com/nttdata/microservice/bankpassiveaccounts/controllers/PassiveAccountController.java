@@ -96,38 +96,26 @@ public class PassiveAccountController {
 	}
 	
 	
-	@GetMapping("/find/{accountNumber}")
+	// EXTERNAL VALIDATORS
+	@GetMapping("/getAccountBalance/{accountNumber}")
 	public Mono<Double> getAccountBalance(@PathVariable("accountNumber") String accountNumber)
 			throws Exception {
 		logger.info("get account balance by account number");
 		return pasiveAccountService.getAccountBalance(accountNumber);
 	}
 	
+	@GetMapping("/checkIfExist/{accountNumber}")
+	public Mono<Boolean> checkIfExist(@PathVariable("accountNumber") String accountNumber)
+			throws Exception {
+		logger.info("check if account number exist");
+		return pasiveAccountService.checkIfExist(accountNumber);
+	}
 	
-	/*@PutMapping(value = "/update/{personCode}")
-	public Mono<PassiveAccountCollection> updatePasiveAccount(@RequestParam("personCode") String personCode,
-			@RequestBody PassiveAccountCollection updateCollection) throws Exception {
-
-		Mono<PassiveAccountCollection> result = pasiveAccountService.getByAccountCode(personCode);
-		PassiveAccountCollection resultCollection = result.block();
-
-		Mono<PassiveAccountCollection> resultUpdated = null;
-
-		try {
-			if (resultCollection != null) {
-				resultUpdated = pasiveAccountService.update(resultCollection, personCode);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return resultUpdated;
-	}*/
+	@PostMapping(value = "/updateCreditDebitNumber/")
+	public Mono<PassiveAccountCollection> updateCreditDebitNumber(@PathVariable("accountNumber") String accountNumber
+			, @PathVariable("debitCardNumber") String debitCardNumber) throws Exception{
+		logger.info("associate passive account with debit card");
+		return pasiveAccountService.updateDebitCardNumber(accountNumber, debitCardNumber);
+	}
 	
-	/*@DeleteMapping(value = "/delete")
-	public Mono<Void> deletePasiveAccount(@RequestBody PassiveAccountCollection collection) throws Exception{
-		return pasiveAccountService.delete(collection);
-	}*/
-
 }

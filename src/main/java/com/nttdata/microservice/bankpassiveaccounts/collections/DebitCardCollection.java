@@ -17,6 +17,7 @@ public class DebitCardCollection {
 	@Id
 	private ObjectId id;
 	private String debitCardNumber;
+	private String personCode;
 	private String mainAccountNumber;
 
 }

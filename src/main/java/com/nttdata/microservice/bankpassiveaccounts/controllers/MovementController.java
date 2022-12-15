@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nttdata.microservice.bankpassiveaccounts.collections.MovementsCollection;
-import com.nttdata.microservice.bankpassiveaccounts.collections.PassiveAccountCollection;
-import com.nttdata.microservice.bankpassiveaccounts.collections.enums.MovementTypeEnum;
-import com.nttdata.microservice.bankpassiveaccounts.dto.CurrentAccountPersonalDto;
 import com.nttdata.microservice.bankpassiveaccounts.services.IMovementService;
 
 import reactor.core.publisher.Flux;
@@ -27,28 +24,21 @@ public class MovementController {
 	@Autowired
 	private IMovementService service;
 	
-	/*@PostMapping(value = "/store")
-	public Mono<MovementsCollection> saveMovement(@RequestBody MovementsCollection collection) throws Exception{
-		logger.info("save movement");
-		return movementService.save(collection);
-	}
-	*/
-	
-	/*@GetMapping("/findAll/{accountCode}")
-	public Flux<MovementsCollection> getMovementsByAccountCode(@PathVariable("accountCode") String accountCode)
+	@GetMapping("/getByAccountNumber/{accountNumber}")
+	public Flux<MovementsCollection> getByAccountNumber(@PathVariable("accountNumber") String accountNumber)
 			throws Exception {
 		logger.info("get movement by account code");
-		return movementService.getByAccountCode(accountCode);
-	}*/
+		return service.getByAccountNumber(accountNumber);
+	}
 	
 	@PostMapping(value = "/saveDeposit")
-	public Mono<MovementsCollection> saveDeposit(@RequestBody MovementsCollection collection) throws Exception{
+	public Mono<Void> saveDeposit(@RequestBody MovementsCollection collection) throws Exception{
 		logger.info("save deposit");
 		return service.saveDeposit(collection);
 	}
 	
 	@PostMapping(value = "/saveWithdrawal")
-	public Mono<MovementsCollection> saveWithdrawal(@RequestBody MovementsCollection collection) throws Exception{
+	public Mono<Void> saveWithdrawal(@RequestBody MovementsCollection collection) throws Exception{
 		logger.info("save withdrawal");
 		return service.saveWithdrawal(collection);
 	}
@@ -63,12 +53,6 @@ public class MovementController {
 	public Mono<MovementsCollection> saveTransferThirdAccount(@RequestBody MovementsCollection collection) throws Exception{
 		logger.info("save transfer to third ascount");
 		return service.saveTransferThirdAccount(collection);
-	}
-	
-	@PostMapping(value = "/saveDepositWithDebitCard")
-	public Mono<MovementsCollection> saveDepositWithDebitCard(@RequestBody MovementsCollection collection) throws Exception{
-		logger.info("save deposit with debit card");
-		return service.saveDepositWithDebitCard(collection);
 	}
 	
 	@PostMapping(value = "/saveWithdrawalWithDebitCard")
