@@ -9,13 +9,13 @@ public class PassiveAccountFacadeImpl implements  IPassiveAccountFacade{
 	@Override
 	public Mono<Boolean> checkIfHaveDebt(String personCode) {
 		// TODO Auto-generated method stub
-		return null;
+		return Mono.just(false);
 	}
 
 	@Override
 	public Mono<Boolean> checkIfCreditCard(String personCode) {
 		// TODO Auto-generated method stub
-		return null;
+		return Mono.just(true);
 	}
 
 }

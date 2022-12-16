@@ -1,6 +1,7 @@
 package com.nttdata.microservice.bankpassiveaccounts.services.impl;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class MovementServiceImpl implements IMovementService{
 												 .flatMap(amountBalance -> {
 													 
 													 // CHECK ACCOUNT BALANCE 
-													 if(amountBalance > collection.getAmount()) {
+													 //if(amountBalance > collection.getAmount()) {
 														 
 														// GET TRANSACTION COMMISSION
 														 return passiveAccountService.getTransactionCommission(collection.getAccountNumberDestination())
@@ -78,9 +79,9 @@ public class MovementServiceImpl implements IMovementService{
 																			 });
 															 	});
 														 
-													 }
+													 //}
 													 
-													 return Mono.error(RuntimeException::new);
+													 //return Mono.error(RuntimeException::new);
 											 
 										 });  
 									 }
@@ -109,6 +110,9 @@ public class MovementServiceImpl implements IMovementService{
 								 // GET AMOUNT BALANCE
 								 return passiveAccountService.getAccountBalance(collection.getAccountNumberDestination())
 										 .flatMap(amountBalance -> {
+											 
+											// CHECK ACCOUNT BALANCE 
+											 if(amountBalance > collection.getAmount()) {
 											 	 
 											 // GET TRANSACTION COMMISSION
 											 return passiveAccountService.getTransactionCommission(collection.getAccountNumberDestination())
@@ -134,7 +138,8 @@ public class MovementServiceImpl implements IMovementService{
 																	
 																 });
 												 	});
-												 
+											 }
+											 return Mono.error(RuntimeException::new);
 								 });  
 							 }
 							 return Mono.error(RuntimeException::new);
@@ -168,7 +173,10 @@ public class MovementServiceImpl implements IMovementService{
 											// GET DESTINATION AMOUNT BALANCE
 											 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
 													 .flatMap(destinationAmountBalance -> {
-											 
+														 
+													 
+												// CHECK ACCOUNT BALANCE 
+												 if(sourceAmountBalance > collection.getAmount()) {
 											 	 
 												 // GET TRANSACTION COMMISSION
 												 return passiveAccountService.getTransactionCommission(collection.getAccountNumberSource())
@@ -198,7 +206,11 @@ public class MovementServiceImpl implements IMovementService{
 																		
 																	 });
 													 	});
+												 
+													 }
+													 return Mono.error(RuntimeException::new);
 													 });
+											 
 								 });  
 							 }
 							 return Mono.error(RuntimeException::new);
@@ -233,7 +245,9 @@ public class MovementServiceImpl implements IMovementService{
 											 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
 													 .flatMap(destinationAmountBalance -> {
 											 
-											 	 
+												// CHECK ACCOUNT BALANCE 
+												 if(sourceAmountBalance > collection.getAmount()) {
+													 	
 												 // GET TRANSACTION COMMISSION
 												 return passiveAccountService.getTransactionCommission(collection.getAccountNumberSource())
 													 	.flatMap(transactionCommission -> {
@@ -262,6 +276,9 @@ public class MovementServiceImpl implements IMovementService{
 																		
 																	 });
 													 	});
+													 }
+													 return Mono.error(RuntimeException::new);
+												 
 													 });
 								 });  
 							 }
@@ -361,7 +378,9 @@ public class MovementServiceImpl implements IMovementService{
 
 	@Override
 	public Flux<MovementsCollection> getByAccountNumber(String accountNumber) {
-		return repository.findByAccountNumber(accountNumber);
+		return repository
+				.findAll()
+				.filter(x -> accountNumber.equals(x.getAccountNumberSource()) || accountNumber.equals(x.getAccountNumberDestination()));
 	}
 
 	@Override
@@ -372,14 +391,17 @@ public class MovementServiceImpl implements IMovementService{
 				.flatMap(maximumTransactions -> {
 					
 					//GET TRANSACTIONS COUNT
-					return repository.findByAccountNumber(accountNumber).count()
+					return repository
+							.findAll()
+							.filter(x -> accountNumber.equals(x.getAccountNumberSource()) || accountNumber.equals(x.getAccountNumberDestination()))
+							.count()
 							.flatMap(totalTransactions -> {
 								
 								// VERIFY MAXIMUM TRANSACTIONS
 								if(totalTransactions < maximumTransactions) {
-									return Mono.just(true);	
+									return Mono.just(false);	
 								}
-								return Mono.just(false);
+								return Mono.just(true);
 					});
 				});
 	}
@@ -392,14 +414,17 @@ public class MovementServiceImpl implements IMovementService{
 				.flatMap(maximumTransactions -> {
 					
 					//GET TRANSACTIONS COUNT
-					return repository.findByAccountNumber(accountNumber).count()
+					return repository
+							.findAll()
+							.filter(x -> accountNumber.equals(x.getAccountNumberSource()) || accountNumber.equals(x.getAccountNumberDestination()))
+							.count()
 							.flatMap(totalTransactions -> {
 								
 								// VERIFY MAXIMUM TRANSACTIONS
 								if(totalTransactions < maximumTransactions) {
-									return Mono.just(true);	
+									return Mono.just(false);	
 								}
-								return Mono.just(false);
+								return Mono.just(true);
 					});
 				});
 	}
@@ -429,11 +454,16 @@ public class MovementServiceImpl implements IMovementService{
 	public Mono<Boolean> checkIfHaveAverageAmount(String accountNumber, Double minimumAverageAmount) {
 		
 		// SET START DATA AND END DATE
-		LocalDate local = LocalDate.now();
-	    local = local.minusMonths(1);
+		LocalDate localDateLastMonth = LocalDate.now().minusMonths(1);
+		YearMonth lastMonth = YearMonth.from(localDateLastMonth);
+		LocalDate start = lastMonth.atDay(1);
+		LocalDate end   = lastMonth.atEndOfMonth();
+		
 	    
-	    LocalDate start = LocalDate.of(local.getYear(), local.getMonth(), 1);
-	    LocalDate end = LocalDate.of(local.getYear(), local.getMonth(),30);
+	    
+	    //Date start = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	    //localDate = localDate.minusMonths(1);
+	    //Date end = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 	    
 					//GET MOVEMENTS SUM AMOUNT A MONTH AGO
@@ -441,11 +471,11 @@ public class MovementServiceImpl implements IMovementService{
 							.filter( mo ->  
 								 mo.getCreatedAt().toInstant()
 								.atZone(ZoneId.systemDefault())
-								.toLocalDate().isBefore(start)
+								.toLocalDate().isAfter(start)
 								
 								&& mo.getCreatedAt().toInstant()
 								.atZone(ZoneId.systemDefault())
-								.toLocalDate().isAfter(end)
+								.toLocalDate().isBefore(end)
 							)
 							.map(movement -> movement.getAmount())
 							.reduce(0.0, (x1, x2) -> x1 + x2)
@@ -455,17 +485,17 @@ public class MovementServiceImpl implements IMovementService{
 								return getByAccountNumber(accountNumber)
 										.filter( m -> m.getCreatedAt().toInstant()
 												.atZone(ZoneId.systemDefault())
-												.toLocalDate().isBefore(start)
+												.toLocalDate().isAfter(start)
 												
 												&& m.getCreatedAt().toInstant()
 												.atZone(ZoneId.systemDefault())
-												.toLocalDate().isAfter(end)
+												.toLocalDate().isBefore(end)
 												)
 										.count()
 										.flatMap(cantidad -> {
 											
 											// CHECK IF MINIMUM AVERAGE AMOUNT IS GREATHER THAM CALCULATED AVERAGE AMOUNT 
-											if( (suma/cantidad) > minimumAverageAmount) {
+											if( (suma/cantidad) >= minimumAverageAmount) {
 												return Mono.just(true);	
 											}
 											return Mono.just(false);

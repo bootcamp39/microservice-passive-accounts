@@ -27,7 +27,7 @@ public class DebitCardController {
 		return service.save(collection);
 	}
 	
-	@PostMapping(value = "/save")
+	@PostMapping(value = "/updateMainAccountNumber/{debitCardNumber}/{accountNumber}")
 	public Mono<DebitCardCollection> updateMainAccountNumber(@PathVariable("debitCardNumber") String debitCardNumber, @PathVariable("accountNumber") String accountNumber) throws Exception{
 		logger.info("update main account number");
 		return service.updateMainAccountNumber(debitCardNumber, accountNumber);

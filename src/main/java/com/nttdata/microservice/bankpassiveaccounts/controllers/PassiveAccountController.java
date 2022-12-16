@@ -27,19 +27,6 @@ public class PassiveAccountController {
 	@Autowired
 	private IPassiveAccountService pasiveAccountService;
 	
-	/*@GetMapping("/list-passive-accounts")
-	public Flux<PassiveAccountCollection> getAllPasiveAccounts() throws Exception {
-		logger.info("get all pasive accounts");
-		return pasiveAccountService.getAll();
-	}*/
-
-	/*@GetMapping("/find/{personCode}")
-	public Mono<PassiveAccountCollection> getAccountByPersonCode(@PathVariable("personCode") String personCode)
-			throws Exception {
-		logger.info("get account by personCode");
-		return pasiveAccountService.getByAccountCode(personCode);
-	}*/
-	
 	@PostMapping(value = "/saveCurrentPersonalAccount")
 	public Mono<PassiveAccountCollection> saveCurrentPersonalAccount(@RequestBody CurrentAccountPersonalDto dto) throws Exception{
 		logger.info("save passive account");
@@ -83,13 +70,13 @@ public class PassiveAccountController {
 		return pasiveAccountService.saveCurrentEnterpriseAccount(passiveAccountCollection);
 	}
 	
-	@PostMapping(value = "/saveVipPersonalAccount")
+	@PostMapping(value = "/saveVipPersonalAccount/{accountNumber}/{minimumAverageAmount}")
 	public Mono<PassiveAccountCollection> saveVipPersonalAccount(@PathVariable("accountNumber") String accountNumber, @PathVariable("minimumAverageAmount") Double minimumAverageAccount) throws Exception{
 		logger.info("save passive account");
 		return pasiveAccountService.saveVipPersonalAccount(accountNumber, minimumAverageAccount);
 	}
 	
-	@PostMapping(value = "/savePymeEnterpriseAccount")
+	@PostMapping(value = "/savePymeEnterpriseAccount/{accountNumber}")
 	public Mono<PassiveAccountCollection> savePymeEnterpriseAccount(@PathVariable("accountNumber") String accountNumber) throws Exception{
 		logger.info("save passive account");
 		return pasiveAccountService.savePymeEnterpriseAccount(accountNumber);
@@ -111,7 +98,7 @@ public class PassiveAccountController {
 		return pasiveAccountService.checkIfExist(accountNumber);
 	}
 	
-	@PostMapping(value = "/updateCreditDebitNumber/")
+	@PostMapping(value = "/updateCreditDebitNumber/{accountNumber}/{debitCardNumber}")
 	public Mono<PassiveAccountCollection> updateCreditDebitNumber(@PathVariable("accountNumber") String accountNumber
 			, @PathVariable("debitCardNumber") String debitCardNumber) throws Exception{
 		logger.info("associate passive account with debit card");

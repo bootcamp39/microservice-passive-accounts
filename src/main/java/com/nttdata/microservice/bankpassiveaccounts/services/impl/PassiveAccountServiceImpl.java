@@ -79,7 +79,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 			{
 		
 		return getMinimumOpeningAmount(PassiveAccountTypeEnum.SAVING_ACCOUNT.toString())
-				.flatMap( x -> {
+				.flatMap( minimumOpeningAmount -> {
 					
 					//SETTING DEFAULT VALUES
 					collection.setAccountType(PassiveAccountTypeEnum.SAVING_ACCOUNT.toString());
@@ -88,7 +88,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getMinimumOpenningAmount() < x) {
+					if(collection.getAccountAmount() < minimumOpeningAmount) {
 						return Mono.error(Exception::new);
 					}
 					
@@ -118,7 +118,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 	public Mono<PassiveAccountCollection> saveFixTermPersonalAccount(PassiveAccountCollection collection)
 			{
 		return getMinimumOpeningAmount(PassiveAccountTypeEnum.FIX_TERM_ACCOUNT.toString())
-				.flatMap( x -> {
+				.flatMap( minimumOpeningAmount -> {
 					
 					//SETTING DEFAULT VALUES
 					collection.setAccountType(PassiveAccountTypeEnum.FIX_TERM_ACCOUNT.toString());
@@ -127,7 +127,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getMinimumOpenningAmount() < x) {
+					if(collection.getAccountAmount() < minimumOpeningAmount) {
 						return Mono.error(Exception::new);
 					}
 					
@@ -157,7 +157,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 	public Mono<PassiveAccountCollection> saveCurrentEnterpriseAccount(PassiveAccountCollection collection)
 			{
 		return getMinimumOpeningAmount(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString())
-				.flatMap( x -> {
+				.flatMap( minimumOpeningAmount -> {
 					
 					//SETTING DEFAULT VALUES
 					collection.setAccountType(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString());
@@ -166,7 +166,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getMinimumOpenningAmount() < x) {
+					if(collection.getAccountAmount() < minimumOpeningAmount) {
 						return Mono.error(Exception::new);
 					}
 					
