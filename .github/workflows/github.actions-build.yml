@@ -20,7 +20,7 @@ jobs:
     - name: Publish to Docker Hub
       uses: docker/build-push-action@v1
       with:
-       username: ${{ secrets.DOCKER_HUB_USERNAME }}
-       password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-       repository: fichpas/greetings
+       username: ${{ secrets.DOCKERHUB_USER }}
+       password: ${{ secrets.DOCKERHUB_PASS }}
+       repository: csanmont/microservice-passive-accounts
        tags: ${{github.run_number}}
