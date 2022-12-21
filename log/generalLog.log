@@ -195,3 +195,13 @@
 [2022-12-21 06:34:45] [ INFO ] [MovementController:36] save deposit
 [2022-12-21 06:40:05] [ INFO ] [MovementController:36] save deposit
 [2022-12-21 06:47:11] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 07:14:40] [ INFO ] [DebitCardController:26] save debit card
+[2022-12-21 07:15:28] [ INFO ] [DebitCardController:26] save debit card
+[2022-12-21 07:20:54] [ INFO ] [DebitCardController:26] save debit card
+[2022-12-21 07:30:05] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:33:55] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:38:25] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:42:51] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:43:59] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:49:46] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-21 07:55:11] [ INFO ] [MovementController:60] save withdrawal with debit card

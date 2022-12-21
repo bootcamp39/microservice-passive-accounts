@@ -302,11 +302,11 @@ public class MovementServiceImpl implements IMovementService{
 					 return passiveAccountService.getAccountBalance(mainAccountNumber)
 							 .flatMap(mainAmountBalance -> {
 								//CHECK MAIN AMOUNT BALANCE
-								 if(mainAmountBalance < collection.getAmount()) {
+								 if(Double.compare(mainAmountBalance,collection.getAmount()) < 0) {
 									// GET AVAILABLE ACCOUNT
 									 return passiveAccountService.getAccountNumberAvailable(collection.getPersonCode(), collection.getAmount());
 								 }
-								 return Mono.empty();
+								 return Mono.just(mainAccountNumber);
 							 });
 				});
 		accountNumberMono.subscribe();
