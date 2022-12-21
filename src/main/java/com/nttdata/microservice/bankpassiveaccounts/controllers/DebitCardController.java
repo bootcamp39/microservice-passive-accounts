@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "debitcard")
 public class DebitCardController {
 
-	private static Logger logger = Logger.getLogger(PassiveAccountController.class);
+	private static Logger logger = Logger.getLogger(DebitCardController.class);
 	@Autowired
 	private IDebitCardService service;
 	

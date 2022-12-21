@@ -24,6 +24,7 @@ public class PassiveAccountCollection {
 	private String personCode;
 	
 	private String debitCardNumber;
+	private String walletNumber;
 	
 	private Double accountAmount;
 	private Double accountBalance;
