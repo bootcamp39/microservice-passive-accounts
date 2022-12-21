@@ -27,8 +27,8 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 	@Autowired
 	private IPassiveAccountFacade facade;
 	
-	@Autowired
-	private IMovementService movementService;
+	//@Autowired
+	//private IMovementService movementService;
 	
 
 	@Override
@@ -192,11 +192,11 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 				.next()
 				.flatMap(account -> {
 					//VALIDATE MINIMUM OPENING AMOUNT
-					return movementService.checkIfHaveAverageAmount(numberAccount, minimumAverageAmount)
+					/*return movementService.checkIfHaveAverageAmount(numberAccount, minimumAverageAmount)
 							.flatMap(result -> {
 								if(result == false) {
 									return Mono.error(RuntimeException::new);
-								}
+								}*/
 								//CHECK IF HAVE CREDIT CARD
 								return facade.checkIfCreditCard(account.getPersonCode())
 										.flatMap(a -> {
@@ -222,7 +222,7 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 										});
 									
 								});
-							});
+							//});
 				});
 		
 	}

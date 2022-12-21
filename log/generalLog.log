@@ -142,3 +142,36 @@
 [2022-12-19 02:57:34] [ INFO ] [PassiveAccountController:53] save passive account
 [2022-12-19 02:57:34] [ INFO ] [PassiveAccountController:90] get account balance by account number
 [2022-12-19 02:57:34] [ INFO ] [PassiveAccountController:32] save passive account
+[2022-12-20 15:47:41] [ INFO ] [DebitCardController:26] save debit card
+[2022-12-20 15:47:44] [ INFO ] [MovementController:36] save deposit
+[2022-12-20 15:47:44] [ INFO ] [MovementController:48] save transfer with same account
+[2022-12-20 15:47:44] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-20 15:47:44] [ INFO ] [MovementController:30] get movement by account code
+[2022-12-20 15:47:44] [ INFO ] [MovementController:42] save withdrawal
+[2022-12-20 15:47:45] [ INFO ] [MovementController:54] save transfer to third ascount
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:43] save passive account
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:63] save passive account
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:81] save passive account
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:104] associate passive account with debit card
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:97] check if account number exist
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:75] save passive account
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:53] save passive account
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:90] get account balance by account number
+[2022-12-20 15:47:47] [ INFO ] [PassiveAccountController:32] save passive account
+[2022-12-20 15:49:51] [ INFO ] [DebitCardController:32] update main account number
+[2022-12-20 15:49:52] [ INFO ] [DebitCardController:26] save debit card
+[2022-12-20 15:49:53] [ INFO ] [MovementController:36] save deposit
+[2022-12-20 15:49:53] [ INFO ] [MovementController:48] save transfer with same account
+[2022-12-20 15:49:53] [ INFO ] [MovementController:60] save withdrawal with debit card
+[2022-12-20 15:49:53] [ INFO ] [MovementController:30] get movement by account code
+[2022-12-20 15:49:53] [ INFO ] [MovementController:42] save withdrawal
+[2022-12-20 15:49:53] [ INFO ] [MovementController:54] save transfer to third ascount
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:43] save passive account
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:63] save passive account
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:81] save passive account
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:104] associate passive account with debit card
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:97] check if account number exist
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:75] save passive account
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:53] save passive account
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:90] get account balance by account number
+[2022-12-20 15:49:55] [ INFO ] [PassiveAccountController:32] save passive account
