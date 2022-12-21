@@ -13,7 +13,9 @@ public class CurrentAccountEnterpriseDto {
 
 	private String accountNumber;
 	private String personCode;
-	private Double maintenanceCommission;
+	private Double accountAmount;
+	private Double accountBalance;
+	private Double transactionCommission;
 	private Integer maximumTransactionsWithoutCommission;
 	private List<String> holders;
 	private List<String> signatories;

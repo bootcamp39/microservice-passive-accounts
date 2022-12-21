@@ -32,8 +32,11 @@ public class PassiveAccountController {
 		logger.info("save passive account");
 		PassiveAccountCollection passiveAccountCollection = new PassiveAccountCollection();
 		passiveAccountCollection.setAccountNumber(dto.getAccountNumber());
+		passiveAccountCollection.setAccountAmount(dto.getAccountAmount());
+		passiveAccountCollection.setAccountBalance(dto.getAccountBalance());
 		passiveAccountCollection.setPersonCode(dto.getPersonCode());
 		passiveAccountCollection.setMaintenanceCommission(dto.getMaintenanceCommission());
+		passiveAccountCollection.setTransactionCommission(dto.getTransactionCommission());
 		passiveAccountCollection.setMaximumTransactionsWithoutCommission(dto.getMaximumTransactionsWithoutCommission());
 		return pasiveAccountService.saveCurrentPersonalAccount(passiveAccountCollection);
 	}
@@ -43,8 +46,11 @@ public class PassiveAccountController {
 		logger.info("save passive account");
 		PassiveAccountCollection passiveAccountCollection = new PassiveAccountCollection();
 		passiveAccountCollection.setAccountNumber(dto.getAccountNumber());
+		passiveAccountCollection.setAccountAmount(dto.getAccountAmount());
+		passiveAccountCollection.setAccountBalance(dto.getAccountBalance());
 		passiveAccountCollection.setPersonCode(dto.getPersonCode());
 		passiveAccountCollection.setMaximumTransactions(dto.getMaximumTransactions());
+		passiveAccountCollection.setTransactionCommission(dto.getTransactionCommission());
 		return pasiveAccountService.saveSavingPersonalAccount(passiveAccountCollection);
 	}
 	
@@ -53,8 +59,14 @@ public class PassiveAccountController {
 		logger.info("save passive account");
 		PassiveAccountCollection passiveAccountCollection = new PassiveAccountCollection();
 		passiveAccountCollection.setAccountNumber(dto.getAccountNumber());
+		passiveAccountCollection.setAccountAmount(dto.getAccountAmount());
+		passiveAccountCollection.setAccountBalance(dto.getAccountBalance());
+		passiveAccountCollection.setMaximumTransactions(dto.getMaximumTransactions());
 		passiveAccountCollection.setPersonCode(dto.getPersonCode());
 		passiveAccountCollection.setDayMovementAvailable(dto.getDayMovementAvailable());
+		passiveAccountCollection.setTransactionCommission(dto.getTransactionCommission());
+		passiveAccountCollection.setMaximumTransactionsWithoutCommission(dto.getMaximumTransactionsWithoutCommission());
+		
 		return pasiveAccountService.saveFixTermPersonalAccount(passiveAccountCollection);
 	}
 	
@@ -64,7 +76,9 @@ public class PassiveAccountController {
 		PassiveAccountCollection passiveAccountCollection = new PassiveAccountCollection();
 		passiveAccountCollection.setAccountNumber(dto.getAccountNumber());
 		passiveAccountCollection.setPersonCode(dto.getPersonCode());
-		passiveAccountCollection.setMaintenanceCommission(dto.getMaintenanceCommission());
+		passiveAccountCollection.setAccountAmount(dto.getAccountAmount());
+		passiveAccountCollection.setAccountBalance(dto.getAccountBalance());
+		passiveAccountCollection.setTransactionCommission(dto.getTransactionCommission());
 		passiveAccountCollection.setMaximumTransactionsWithoutCommission(dto.getMaximumTransactionsWithoutCommission());
 		
 		return pasiveAccountService.saveCurrentEnterpriseAccount(passiveAccountCollection);

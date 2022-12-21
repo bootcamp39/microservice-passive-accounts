@@ -11,7 +11,10 @@ public class CurrentAccountPersonalDto {
 
 	private String accountNumber;
 	private String personCode;
+	private Double accountAmount;
+	private Double accountBalance;
 	private Double maintenanceCommission;
+	private Double transactionCommission;
 	private Integer maximumTransactionsWithoutCommission;
 	
 }

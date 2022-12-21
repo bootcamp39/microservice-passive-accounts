@@ -11,6 +11,11 @@ public class FixTermPersonalDto {
 	
 	private String accountNumber;
 	private String personCode;
+	private Double accountAmount;
+	private Double accountBalance;
+	private Integer maximumTransactions;
 	private Integer dayMovementAvailable;
+	private Double transactionCommission;
+	private Integer maximumTransactionsWithoutCommission;
 
 }
