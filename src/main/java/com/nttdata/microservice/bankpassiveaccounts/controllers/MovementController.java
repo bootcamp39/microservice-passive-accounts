@@ -61,4 +61,11 @@ public class MovementController {
 		return service.saveWithdrawalWithDebitCard(collection);
 	}
 	
+	@PostMapping(value = "/saveWithdrawalWithWallet")
+	public Mono<MovementsCollection> saveWithdrawalWithWallet(@RequestBody MovementsCollection collection) throws Exception{
+		logger.info("save withdrawal with wallet");
+		return service.saveWithdrawalWithWallet(collection);
+	}
+	
+	
 }

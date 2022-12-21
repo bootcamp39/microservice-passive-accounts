@@ -15,6 +15,8 @@ public interface IMovementService {
 	
 	public Mono<MovementsCollection> saveWithdrawalWithDebitCard(MovementsCollection collection);
 	
+	public Mono<MovementsCollection> saveWithdrawalWithWallet(MovementsCollection collection);
+	
 	public Flux<MovementsCollection> getByAccountNumber(String accountNumber);
 	
 	public Mono<Boolean> checkMaximumTransactions(String accountNumber);

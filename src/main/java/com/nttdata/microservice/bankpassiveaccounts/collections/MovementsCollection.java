@@ -20,6 +20,7 @@ public class MovementsCollection {
 	private ObjectId id;
 	
 	private String personCode;
+	private String walletNumber;
 	private String debitCardNumber;
 	private String accountNumberSource;
 	private String accountNumberDestination;

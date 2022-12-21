@@ -31,4 +31,11 @@ public class WalletServiceImpl implements  IWalletService{
 		});
 	}
 
+	@Override
+	public Mono<String> getDebitCardNumber(String walletNumber) {
+		return repository.findByWalletNumber(walletNumber).next().flatMap(collection -> {
+			return Mono.just(collection.getDebitCardNumber());
+		});
+	}
+
 }

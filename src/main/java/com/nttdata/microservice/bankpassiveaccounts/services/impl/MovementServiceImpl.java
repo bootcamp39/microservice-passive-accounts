@@ -13,6 +13,7 @@ import com.nttdata.microservice.bankpassiveaccounts.repository.IMovementReposito
 import com.nttdata.microservice.bankpassiveaccounts.services.IDebitCardService;
 import com.nttdata.microservice.bankpassiveaccounts.services.IMovementService;
 import com.nttdata.microservice.bankpassiveaccounts.services.IPassiveAccountService;
+import com.nttdata.microservice.bankpassiveaccounts.services.IWalletService;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,6 +29,9 @@ public class MovementServiceImpl implements IMovementService{
 	
 	@Autowired
 	private IDebitCardService debitCardService;
+	
+	@Autowired
+	private IWalletService walletService;
 
 	@Override
 	public Mono<Void> saveDeposit(MovementsCollection collection) {
@@ -506,6 +510,176 @@ public class MovementServiceImpl implements IMovementService{
 							});
 							
 				
+	}
+
+	@Override
+	public Mono<MovementsCollection> saveWithdrawalWithWallet(MovementsCollection collection) {
+		collection.setMovementType(MovementTypeEnum.WITHDRAWAL_WALLET.toString());
+		
+		//GET DEBIT CARD
+		
+		Mono<String> debitCardNumberMono =  walletService.getDebitCardNumber(collection.getWalletNumber());
+		debitCardNumberMono.subscribe();
+		
+		
+		return debitCardNumberMono.flatMap( debitCardNumber -> {
+			
+			return debitCardService.getMainAccountNumber(debitCardNumber).flatMap(mainAccountNumber -> {
+				
+				// GET MAIN AMOUNT BALANCE
+				 return passiveAccountService.getAccountBalance(mainAccountNumber)
+						 .flatMap(mainAmountBalance -> {
+							//CHECK MAIN AMOUNT BALANCE
+							 if(Double.compare(mainAmountBalance,collection.getAmount()) < 0) {
+								// GET AVAILABLE ACCOUNT
+								 return Mono.error(RuntimeException::new);
+							 }
+							 
+							 //return Mono.just(mainAccountNumber);
+							 
+							 collection.setAccountNumberSource(mainAccountNumber);
+								
+								// CHECK MAXIMUM TRANSACTIONS
+								return checkMaximumTransactions(collection.getAccountNumberSource())
+										 .flatMap(checkMaximumTransactions -> {
+											 if(checkMaximumTransactions) {
+												 
+												 // CHECK DAY MOVEMENT AVAILABLE
+										 return checkDayMovementAvailable(collection.getAccountNumberSource())
+												 .flatMap(checkDayMovementAvailable -> {
+													 if(checkDayMovementAvailable) {
+														 
+														 // GET SOURCE AMOUNT BALANCE
+														 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
+																 .flatMap(sourceAmountBalance -> {
+																	 
+																	// GET DESTINATION AMOUNT BALANCE
+																	 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
+																			 .flatMap(destinationAmountBalance -> {
+																	 
+																	 	 
+																		 // GET TRANSACTION COMMISSION
+																		 return passiveAccountService.getTransactionCommission(collection.getAccountNumberSource())
+																			 	.flatMap(transactionCommission -> {
+																			 		
+																			 	    // CHECK MAXIMUM TRANSACTIONS WITHOUT COMMISSION
+																			 		return checkMaximumTransactionsWithoutCommission(collection.getAccountNumberSource())
+																			 				.flatMap(checkMaximumTransactionsWithoutCommission -> {
+																			 					if(checkMaximumTransactionsWithoutCommission) {
+																			 						
+																			 						// ADD TRANSACTION COMMISSSION
+																			 						collection.setTransactionCommission(transactionCommission);
+																								}
+																			 					
+																			 					// SAVE MOVEMENT
+																								repository.save(collection).subscribe();
+																								
+																								// UPDATE NEW SOURCE BALANCE
+																			 					Double newSourceAmountBalance = sourceAmountBalance - collection.getAmount();
+																			 					passiveAccountService.updateAccountBalance(collection.getAccountNumberSource(), newSourceAmountBalance).subscribe();
+																			 					
+																			 				    // UPDATE NEW DESTINATION BALANCE
+																			 					Double newDestinationAmountBalance = destinationAmountBalance + collection.getAmount();
+																			 					passiveAccountService.updateAccountBalance(collection.getAccountNumberDestination(), newDestinationAmountBalance).subscribe();
+																			 					
+																								return Mono.empty();
+																								
+																							 });
+																			 	});
+																			 });
+														 });  
+													 }
+													 return Mono.error(RuntimeException::new);
+										 });
+									 }
+									 return Mono.error(RuntimeException::new);
+								 });
+							 
+						 });
+				
+			});
+		});
+		
+
+		// GET ACCOUNT
+		/*Mono<String> accountNumberMono = debitCardService.getMainAccountNumber(collection.getDebitCardNumber())
+				.flatMap( mainAccountNumber -> {
+					// GET MAIN AMOUNT BALANCE
+					 return passiveAccountService.getAccountBalance(mainAccountNumber)
+							 .flatMap(mainAmountBalance -> {
+								//CHECK MAIN AMOUNT BALANCE
+								 if(Double.compare(mainAmountBalance,collection.getAmount()) < 0) {
+									// GET AVAILABLE ACCOUNT
+									 return passiveAccountService.getAccountNumberAvailable(collection.getPersonCode(), collection.getAmount());
+								 }
+								 return Mono.just(mainAccountNumber);
+							 });
+				});
+		accountNumberMono.subscribe();
+		
+		
+		// PROCCESS ACCOUNT
+		return accountNumberMono.flatMap(accountNumber -> {
+			
+			collection.setAccountNumberSource(accountNumber);
+			
+			// CHECK MAXIMUM TRANSACTIONS
+			return checkMaximumTransactions(collection.getAccountNumberSource())
+					 .flatMap(checkMaximumTransactions -> {
+						 if(checkMaximumTransactions) {
+							 
+							 // CHECK DAY MOVEMENT AVAILABLE
+					 return checkDayMovementAvailable(collection.getAccountNumberSource())
+							 .flatMap(checkDayMovementAvailable -> {
+								 if(checkDayMovementAvailable) {
+									 
+									 // GET SOURCE AMOUNT BALANCE
+									 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
+											 .flatMap(sourceAmountBalance -> {
+												 
+												// GET DESTINATION AMOUNT BALANCE
+												 return passiveAccountService.getAccountBalance(collection.getAccountNumberSource())
+														 .flatMap(destinationAmountBalance -> {
+												 
+												 	 
+													 // GET TRANSACTION COMMISSION
+													 return passiveAccountService.getTransactionCommission(collection.getAccountNumberSource())
+														 	.flatMap(transactionCommission -> {
+														 		
+														 	    // CHECK MAXIMUM TRANSACTIONS WITHOUT COMMISSION
+														 		return checkMaximumTransactionsWithoutCommission(collection.getAccountNumberSource())
+														 				.flatMap(checkMaximumTransactionsWithoutCommission -> {
+														 					if(checkMaximumTransactionsWithoutCommission) {
+														 						
+														 						// ADD TRANSACTION COMMISSSION
+														 						collection.setTransactionCommission(transactionCommission);
+																			}
+														 					
+														 					// SAVE MOVEMENT
+																			repository.save(collection).subscribe();
+																			
+																			// UPDATE NEW SOURCE BALANCE
+														 					Double newSourceAmountBalance = sourceAmountBalance - collection.getAmount();
+														 					passiveAccountService.updateAccountBalance(collection.getAccountNumberSource(), newSourceAmountBalance).subscribe();
+														 					
+														 				    // UPDATE NEW DESTINATION BALANCE
+														 					Double newDestinationAmountBalance = destinationAmountBalance + collection.getAmount();
+														 					passiveAccountService.updateAccountBalance(collection.getAccountNumberDestination(), newDestinationAmountBalance).subscribe();
+														 					
+																			return Mono.empty();
+																			
+																		 });
+														 	});
+														 });
+									 });  
+								 }
+								 return Mono.error(RuntimeException::new);
+					 });
+				 }
+				 return Mono.error(RuntimeException::new);
+			 });
+			
+		});*/
 	}
 
 	
