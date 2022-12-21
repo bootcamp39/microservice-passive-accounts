@@ -22,7 +22,9 @@ public class WalletCollection {
 	private String phone;
 	private String imei;
 	private String email;
-	private String personCode;
+	private String documentNumber;
+	private String documentType;
+	private String debitCardNumber;
 	
 	private String state;
 	private Date createdAt;
