@@ -186,3 +186,11 @@
 [2022-12-21 05:26:13] [ INFO ] [PassiveAccountController:32] save passive account
 [2022-12-21 05:29:17] [ INFO ] [PassiveAccountController:32] save passive account
 [2022-12-21 05:30:27] [ INFO ] [PassiveAccountController:32] save passive account
+[2022-12-21 06:13:01] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:16:52] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:17:32] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:24:26] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:26:49] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:30:57] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:34:45] [ INFO ] [MovementController:36] save deposit
+[2022-12-21 06:40:05] [ INFO ] [MovementController:36] save deposit

@@ -388,17 +388,19 @@ public class MovementServiceImpl implements IMovementService{
 		
 		// GET MAXIMUM TRANSACTIONS
 		return passiveAccountService.getMaximumTransactions(accountNumber)
+				.switchIfEmpty(Mono.just(0))
 				.flatMap(maximumTransactions -> {
-					
 					//GET TRANSACTIONS COUNT
 					return repository
 							.findAll()
 							.filter(x -> accountNumber.equals(x.getAccountNumberSource()) || accountNumber.equals(x.getAccountNumberDestination()))
+							.switchIfEmpty(Flux.empty())
 							.count()
 							.flatMap(totalTransactions -> {
 								
 								// VERIFY MAXIMUM TRANSACTIONS
-								if(totalTransactions < maximumTransactions) {
+								if(Integer.compare(0, maximumTransactions)  < 0 
+										&& Integer.compare(totalTransactions.intValue(), maximumTransactions)  < 0 ) {
 									return Mono.just(false);	
 								}
 								return Mono.just(true);

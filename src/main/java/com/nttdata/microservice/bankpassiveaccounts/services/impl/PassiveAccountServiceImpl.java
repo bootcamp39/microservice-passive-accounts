@@ -42,6 +42,8 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setAccountType(PassiveAccountTypeEnum.CURRENT_ACCOUNT.toString());
 					collection.setPersonType(PersonTypeEnum.PERSONAL.toString());
 					collection.setAccountNumber(UUID.randomUUID().toString());
+					collection.setMaximumTransactions(0);
+					
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
@@ -294,35 +296,35 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 	@Override
 	public Mono<Integer> getMaximumTransactions(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getMaximumTransactions());
+			return x.getMaximumTransactions()!=null?Mono.just(x.getMaximumTransactions()):Mono.just(0);
 		});
 	}
 
 	@Override
 	public Mono<Integer> getMaximumTransactionsWithoutCommission(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getMaximumTransactionsWithoutCommission());
+			return x.getMaximumTransactionsWithoutCommission()!=null?Mono.just(x.getMaximumTransactionsWithoutCommission()):Mono.just(0);
 		});
 	}
 	
 	@Override
 	public Mono<Double> getTransactionCommission(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getTransactionCommission());
+			return x.getTransactionCommission()!=null?Mono.just(x.getTransactionCommission()):Mono.just(0.0);
 		});
 	}
 	
 	@Override
 	public Mono<Double> getMaintenanceCommission(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getMaintenanceCommission());
+			return x.getMaintenanceCommission()!=null?Mono.just(x.getMaintenanceCommission()):Mono.just(0.0);
 		});
 	}
 
 	@Override
 	public Mono<Integer> getDayMovementAvailable(String accountNumber) {
 		return repository.findByAccountNumber(accountNumber).next().flatMap(x -> {
-			return Mono.just(x.getDayMovementAvailable());
+			return x.getDayMovementAvailable()!=null?Mono.just(x.getDayMovementAvailable()):Mono.just(0);
 		});
 	}
 	
