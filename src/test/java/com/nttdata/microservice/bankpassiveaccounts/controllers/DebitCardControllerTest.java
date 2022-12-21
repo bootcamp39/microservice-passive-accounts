@@ -32,7 +32,7 @@ class DebitCardControllerTest {
 	}
 
 	@Test
-	@DisplayName("Test save debit card")
+	@DisplayName("Test save debit cards")
 	void save() {
 		
 		DebitCardCollection debitCard = new DebitCardCollection();
