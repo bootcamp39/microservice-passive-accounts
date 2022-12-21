@@ -45,21 +45,21 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getAccountAmount() < minimumOpeningAmount) {
+					if(Double.compare(minimumOpeningAmount, collection.getAccountAmount()) > 0 ) {
 						return Mono.error(Exception::new);
 					}
 					
 					return checkIfHaveMoreThanOneAccount(collection.getPersonCode()).flatMap(y -> {
 						
 						//CHECK IF HAVE MORE THAN ONE ACCOUNT
-						if(y == true) {
+						if(Boolean.compare(true, y ) == 0) {
 							return Mono.error(Exception::new);
 						}
 						
 						return facade.checkIfHaveDebt(collection.getPersonCode()).flatMap(z -> {
 							
 							//CHECK IF HAVE DEBT
-							if(z == true) {
+							if(Boolean.compare(true, z )==0) {
 								return Mono.error(Exception::new);	
 							}
 							
@@ -88,21 +88,21 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getAccountAmount() < minimumOpeningAmount) {
+					if(Double.compare(minimumOpeningAmount, collection.getAccountAmount()) > 0 ) {
 						return Mono.error(Exception::new);
 					}
 					
 					return checkIfHaveMoreThanOneAccount(collection.getPersonCode()).flatMap(y -> {
 						
 						//CHECK IF HAVE MORE THAN ONE ACCOUNT
-						if(y == true) {
+						if(Boolean.compare(true, y ) == 0) {
 							return Mono.error(Exception::new);
 						}
 						
 						return facade.checkIfHaveDebt(collection.getPersonCode()).flatMap(z -> {
 							
 							//CHECK IF HAVE DEBT
-							if(z == true) {
+							if(Boolean.compare(true, z )==0) {
 								return Mono.error(Exception::new);	
 							}
 							
@@ -127,21 +127,21 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getAccountAmount() < minimumOpeningAmount) {
+					if(Double.compare(minimumOpeningAmount, collection.getAccountAmount()) > 0 ) {
 						return Mono.error(Exception::new);
 					}
 					
 					return checkIfHaveMoreThanOneAccount(collection.getPersonCode()).flatMap(y -> {
 						
 						//CHECK IF HAVE MORE THAN ONE ACCOUNT
-						if(y == true) {
+						if(Boolean.compare(true, y ) == 0) {
 							return Mono.error(Exception::new);
 						}
 						
 						return facade.checkIfHaveDebt(collection.getPersonCode()).flatMap(z -> {
 							
 							//CHECK IF HAVE DEBT
-							if(z == true) {
+							if(Boolean.compare(true, z )==0) {
 								return Mono.error(Exception::new);	
 							}
 							
@@ -166,14 +166,14 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					collection.setCreatedAt(new Date());
 					
 					//VALIDATE MINIMUM OPENING AMOUNT
-					if(collection.getAccountAmount() < minimumOpeningAmount) {
+					if(Double.compare(minimumOpeningAmount, collection.getAccountAmount()) > 0 ) {
 						return Mono.error(Exception::new);
 					}
 					
 					return facade.checkIfHaveDebt(collection.getPersonCode()).flatMap(z -> {
 						
 						//CHECK IF HAVE DEBT
-						if(z == true) {
+						if(Boolean.compare(true, z )==0) {
 							return Mono.error(Exception::new);	
 						}
 						
@@ -201,13 +201,13 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 								return facade.checkIfCreditCard(account.getPersonCode())
 										.flatMap(a -> {
 										
-										if(a == false) {
+											if(Boolean.compare(false, a )==0) {
 											return Mono.error(RuntimeException::new);	
 										}
 										
 										//CHECK IF HAVE DEBT
 										return facade.checkIfHaveDebt(account.getPersonCode()).flatMap(z -> {
-											if(z == true) {
+											if(Boolean.compare(true, z )==0) {
 												return Mono.error(Exception::new);	
 											}
 											
@@ -239,13 +239,13 @@ public class PassiveAccountServiceImpl implements IPassiveAccountService{
 					return facade.checkIfCreditCard(account.getPersonCode())
 							.flatMap(a -> {
 							
-							if(a == false) {
+								if(Boolean.compare(false, a )==0) {
 								return Mono.error(RuntimeException::new);	
 							}
 							
 							//CHECK IF HAVE DEBT
 							return facade.checkIfHaveDebt(account.getPersonCode()).flatMap(z -> {
-								if(z == true) {
+								if(Boolean.compare(true, z )==0) {
 									return Mono.error(Exception::new);	
 								}
 								
