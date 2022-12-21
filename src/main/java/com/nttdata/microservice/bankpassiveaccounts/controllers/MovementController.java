@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "movement")
 public class MovementController {
 	
-	private static Logger logger = Logger.getLogger(PassiveAccountController.class);
+	private static Logger logger = Logger.getLogger(MovementController.class);
 	
 	@Autowired
 	private IMovementService service;
