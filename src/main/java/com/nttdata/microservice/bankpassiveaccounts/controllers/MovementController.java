@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.nttdata.microservice.bankpassiveaccounts.collections.MovementsCollection;
+import com.nttdata.microservice.bankpassiveaccounts.producer.KafkaStringProducer;
 import com.nttdata.microservice.bankpassiveaccounts.services.IMovementService;
 
 import reactor.core.publisher.Flux;
@@ -20,6 +23,13 @@ import reactor.core.publisher.Mono;
 public class MovementController {
 	
 	private static Logger logger = Logger.getLogger(MovementController.class);
+	
+	private final KafkaStringProducer kafkaStringProducer;
+
+    @Autowired
+    MovementController(KafkaStringProducer kafkaStringProducer) {
+        this.kafkaStringProducer = kafkaStringProducer;
+    }
 	
 	@Autowired
 	private IMovementService service;
@@ -58,6 +68,8 @@ public class MovementController {
 	@PostMapping(value = "/saveWithdrawalWithDebitCard")
 	public Mono<MovementsCollection> saveWithdrawalWithDebitCard(@RequestBody MovementsCollection collection) throws Exception{
 		logger.info("save withdrawal with debit card");
+		String message = collection.getPersonCode() +":"+"save withdrawal with debit card";
+		this.kafkaStringProducer.sendMessage(message);
 		return service.saveWithdrawalWithDebitCard(collection);
 	}
 	
@@ -66,6 +78,12 @@ public class MovementController {
 		logger.info("save withdrawal with wallet");
 		return service.saveWithdrawalWithWallet(collection);
 	}
+	
+	@PostMapping(value = "/publish/{message}")
+    public void sendMessageToKafkaTopic(@PathVariable("message") String message) {
+        this.kafkaStringProducer.sendMessage(message);
+    }
+	
 	
 	
 }

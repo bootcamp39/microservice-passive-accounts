@@ -222,3 +222,10 @@
 [2022-12-21 09:12:51] [ INFO ] [PassiveAccountController:59] save passive account
 [2022-12-21 09:12:51] [ INFO ] [PassiveAccountController:104] get account balance by account number
 [2022-12-21 09:12:51] [ INFO ] [PassiveAccountController:32] save passive account
+[2022-12-21 14:54:15] [ INFO ] [MovementController:66] save withdrawal with wallet
+[2022-12-21 16:37:08] [ INFO ] [MovementController:70] save withdrawal with debit card
+[2022-12-21 16:40:29] [ INFO ] [MovementController:70] save withdrawal with debit card
+[2022-12-21 18:58:21] [ INFO ] [MovementController:78] save withdrawal with wallet
+[2022-12-21 19:01:55] [ INFO ] [MovementController:70] save withdrawal with debit card
+[2022-12-21 19:03:54] [ INFO ] [DebitCardController:32] update main account number
+[2022-12-21 19:03:54] [ INFO ] [DebitCardController:26] save debit card
